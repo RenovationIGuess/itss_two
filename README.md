@@ -1,4 +1,4 @@
-# React - Laravel - Docker Started Pack
+# Project ITSS 2 :))
 
 <p align="center">
   <!---->
@@ -10,10 +10,6 @@
   --><a href="https://ant.design/"><img src="https://img.shields.io/badge/Ant%20Design-5.5.2-blue.svg?style=flat-square" alt="Antd" title="antd" /></a><!--
   --><a href="https://laravel.com/"><img src="https://img.shields.io/badge/Laravel-10.x-orange.svg?style=flat-square" alt="laravel" title="Laravel" /></a>
 </p>
-
-## What is the purpose of this repository?
-
-ITSS 2
 
 <p>
   <!-- <img src="https://firebasestorage.googleapis.com/v0/b/gr1-project-bebf6.appspot.com/o/app_preview%2FScreenshot%202023-07-17%20213028.png?alt=media&token=c8a0cda6-82ad-4d39-bb13-89ccc5e6a8d8" /> -->
