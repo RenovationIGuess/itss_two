@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.6.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -25,6 +26,7 @@
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
+    "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@tanstack/react-query": "^5.40.0",
     "@tanstack/react-table": "^8.17.3",
@@ -38,9 +40,11 @@
     "firebase": "^10.0.0",
     "framer-motion": "^10.12.2",
     "lucide-react": "^0.383.0",
+    "query-string": "^9.0.0",
     "react": "^18.2.0",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.5",
     "react-icons": "^4.8.0",
     "react-router-dom": "^6.10.0",
     "sass": "^1.62.0",
@@ -50,6 +54,7 @@
     "tailwindcss-animate": "^1.0.7",
     "usehooks-ts": "^2.9.1",
     "uuid": "^9.0.0",
+    "zod": "^3.23.8",
     "zustand": "^4.3.9"
   },
   "devDependencies": {
