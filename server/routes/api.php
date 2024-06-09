@@ -1,19 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DirectoryController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\FlashcardController;
-use App\Http\Controllers\FlashcardDeckController;
-use App\Http\Controllers\NoteCommentController;
-use App\Http\Controllers\NoteHistoryController;
-use App\Http\Controllers\NoteController;
-use App\Http\Controllers\PostCommentController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\ScheduleController;
-use App\Http\Controllers\SocialiteController;
-use App\Http\Controllers\TagController;
-use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\TargetController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +25,26 @@ Route::controller(AuthController::class)->group(function () {
         Route::post('signup', 'signup');
         Route::post('refresh', 'refresh');
         Route::get('me', 'me');
+    });
+});
+
+Route::prefix('teams')->group(function () {
+    Route::prefix('targets')->group(function () {
+        Route::controller(TargetController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::get('{targetId}', 'show');
+            Route::post('/', 'store');
+            Route::patch('/{targetId}', 'update');
+            Route::delete('/{targetId}', 'destroy');
+        });
+    });
+
+    Route::controller(TeamController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::get('/{teamId}/role', 'getAuthUserRole');
+        Route::get('{teamId}', 'show');
+        Route::post('/', 'store');
+        Route::post('join', 'join');
     });
 });
 

@@ -15,6 +15,7 @@ class Team extends Model
     protected $fillable = [
         'name',
         'user_id',
+        'join_code',
     ];
 
     public function creator()
