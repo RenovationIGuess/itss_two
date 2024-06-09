@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Faker\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -24,6 +24,8 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'email',
         'password',
+        'name',
+        'avatar'
     ];
 
     /**
@@ -44,10 +46,6 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-    ];
-
-    protected $appends = [
-        'profile',
     ];
 
     /**
@@ -75,35 +73,31 @@ class User extends Authenticatable implements JWTSubject
     {
         parent::boot();
 
+        $faker = Factory::create('en_US');
+
         // Fires an event everytime a new user is created
         // Eloquent model event
-        static::created(function ($user) {
-            // Create the default profile for the user
-            $user->userProfile()->create([
-                'avatar' => \config('env.default_user_ava'),
-                'background_image' => \config('env.default_user_bg'),
-                'sign' => '',
-            ]);
+        static::created(function ($user) use ($faker) {
+            $user->name = $faker->name;
+            $user->avatar = $faker->imageUrl();
         });
     }
 
-    // Profile related relations
-    // A user can have many linked social accounts
-    public function socialAccounts(): HasMany
+    // A user can create many teams
+    public function createdTeams(): HasMany
     {
-        return $this->hasMany(SocialAccount::class);
+        return $this->hasMany(Team::class);
     }
 
-    // Each user has 1 profile
-    public function userProfile()
+    public function joinedTeams()
     {
-        return $this->hasOne(UserProfile::class);
+        return $this->belongsToMany(Team::class, 'team_user_pivot')
+            ->withPivot('role', 'exp')
+            ->withTimestamps();
     }
 
-    protected function profile(): Attribute
+    public function createdTasks()
     {
-        return Attribute::make(
-            get: fn () => $this->userProfile,
-        );
+        return $this->hasMany(TargetTask::class);
     }
 }
