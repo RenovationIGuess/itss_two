@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Edit2, Trash } from 'lucide-react';
+import { Check, Edit2, Trash } from 'lucide-react';
 import React from 'react';
 import { Badge } from '~/components/ui/badge';
 import {
@@ -17,17 +17,34 @@ import {
   ContextMenuTrigger,
 } from '~/components/ui/context-menu';
 import useTasksStore from './hooks/useTasksStore';
+import { cn } from '~/utils';
 
-const TargetTaskItem = ({ taskId, title, due, description, exp }) => {
-  const { onOpen, setSelectedTaskId } = useTasksStore();
+const TargetTaskItem = ({
+  taskId,
+  title,
+  due,
+  description,
+  exp,
+  completed,
+  createdByAdmin,
+}) => {
+  const { onOpen, selectedTaskId, setSelectedTaskId } = useTasksStore();
 
   return (
     <ContextMenu>
       <ContextMenuTrigger>
         <Card
-          onClick={() => setSelectedTaskId(taskId)}
-          className="cursor-pointer hover:shadow-md"
+          onClick={() => createdByAdmin && setSelectedTaskId(taskId)}
+          className={cn(
+            'cursor-pointer hover:shadow-md relative',
+            selectedTaskId === taskId && 'border-black'
+          )}
         >
+          {completed && (
+            <div className="absolute top-5 right-6 w-8 h-8 bg-black/80 rounded-full text-white flex items-center justify-center">
+              <Check className="w-5 h-5" strokeWidth={3} />
+            </div>
+          )}
           <CardHeader>
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description || 'No description'}</CardDescription>

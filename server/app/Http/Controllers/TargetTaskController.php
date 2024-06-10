@@ -90,6 +90,7 @@ class TargetTaskController extends Controller
             'due' => 'nullable|sometimes|date',
             'description' => 'nullable|sometimes|string',
             'exp' => 'sometimes|integer',
+            'completed' => 'sometimes|boolean',
         ]);
 
         /** @var \App\Models\Team $target */

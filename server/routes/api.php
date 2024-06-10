@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TargetController;
 use App\Http\Controllers\TargetTaskController;
+use App\Http\Controllers\TaskApproveRequestController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,16 @@ Route::controller(AuthController::class)->group(function () {
 Route::prefix('teams')->group(function () {
     Route::prefix('targets')->group(function () {
         Route::prefix('tasks')->group(function () {
+            Route::prefix('approve-requests')->group(function () {
+                Route::controller(TaskApproveRequestController::class)->group(function () {
+                    Route::get('/', 'index');
+                    Route::post('/', 'store');
+                    Route::patch('/{requestId}/approve', 'approveRequest');
+                    Route::patch('/{requestId}/evidence', 'updateEvidence');
+                    Route::delete('/{requestId}', 'destroy');
+                });
+            });
+
             Route::controller(TargetTaskController::class)->group(function () {
                 Route::get('/', 'index');
                 Route::get('{taskId}', 'show');

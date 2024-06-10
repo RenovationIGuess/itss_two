@@ -16,8 +16,8 @@ export const useJoinTeamActions = () => {
       .then(({ data }) => {
         const team = data;
 
-        navigate(`/auth/teams/${team.id}`);
         toast.success('Team Created');
+        navigate(`/auth/teams/${team.id}`);
       })
       .catch(() => {
         toast.error('Team Creation Failed');
@@ -28,10 +28,12 @@ export const useJoinTeamActions = () => {
   const joinTeam = useCallback((payload) => {
     setJoining(true);
     axiosClient
-      .post('/auth/teams/join', payload)
-      .then(() => {
+      .post('/teams/join', payload)
+      .then(({ data }) => {
+        const team = data;
+
         toast.success('Team Joined');
-        navigate('/');
+        navigate(`/auth/teams/${team.id}`);
       })
       .catch(() => {
         toast.error('Team Join Failed');

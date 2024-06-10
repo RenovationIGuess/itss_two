@@ -20,6 +20,15 @@ class Target extends Model
         'team_id',
     ];
 
+    protected $appends = ['is_completed'];
+
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->attributes['exp'] = 10;
+    }
+
     public function team()
     {
         return $this->belongsTo(Team::class);
@@ -28,5 +37,30 @@ class Target extends Model
     public function tasks()
     {
         return $this->hasMany(TargetTask::class);
+    }
+
+    protected function getIsCompletedAttribute()
+    {
+        /** @var \App\Models\Team $team */
+        $team = $this->team()->first();
+
+        $members = $team->members()->get();
+
+        $targetTasks = $this->tasks()->get();
+
+        $allTasksCompleted = true;
+
+        foreach ($targetTasks as $task) {
+            foreach ($members as $member) {
+                $approveRequest = $task->taskApproveRequests()->where('user_id', $member->id)->first();
+
+                if (!$approveRequest || $approveRequest->status !== 'approved') {
+                    $allTasksCompleted = false;
+                    break 2; // Break out of both loops
+                }
+            }
+        }
+
+        return $allTasksCompleted;
     }
 }

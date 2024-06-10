@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Edit2, Trash } from 'lucide-react';
+import { Check, Edit2, Trash } from 'lucide-react';
 import React from 'react';
 import { Badge } from '~/components/ui/badge';
 import {
@@ -17,17 +17,26 @@ import {
   ContextMenuTrigger,
 } from '~/components/ui/context-menu';
 import useTargetsStore from './hooks/useTargetsStore';
+import { cn } from '~/utils';
 
-const TargetItem = ({ targetId, title, due, description, exp }) => {
-  const { onOpen, setSelectedTargetId } = useTargetsStore();
+const TargetItem = ({ targetId, title, due, description, exp, completed }) => {
+  const { onOpen, selectedTargetId, setSelectedTargetId } = useTargetsStore();
 
   return (
     <ContextMenu>
       <ContextMenuTrigger>
         <Card
           onClick={() => setSelectedTargetId(targetId)}
-          className="cursor-pointer hover:shadow-md"
+          className={cn(
+            'cursor-pointer hover:shadow-md relative',
+            selectedTargetId === targetId && 'border-black'
+          )}
         >
+          {completed && (
+            <div className="absolute top-5 right-6 w-8 h-8 bg-black/80 rounded-full text-white flex items-center justify-center">
+              <Check className="w-5 h-5" strokeWidth={3} />
+            </div>
+          )}
           <CardHeader>
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description || 'No description'}</CardDescription>
