@@ -1,94 +1,76 @@
-import { ArchiveX, Filter, Loader, ServerCrash, SortAsc } from 'lucide-react';
+import { Filter, SortAsc } from 'lucide-react';
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
 import useTargetsStore from './hooks/useTargetsStore';
-import { useTargetsQuery } from './hooks/useTargetsQuery';
+import CreateTargetModal from './Modals/CreateTargetModal';
+import UpdateTargetModal from './Modals/UpdateTargetModal';
+import ConfirmDeleteTargetModal from './Modals/ConfirmDeleteTargetModal';
+import { useDebounceCallback } from 'usehooks-ts';
+import SortOptions from './components/SortOptions';
+import TargetList from './TargetList';
 
 const Targets = () => {
   const { id: teamId } = useParams();
-  const { searchQueries } = useTargetsStore();
+  const { searchQueries, setSearchQueries } = useTargetsStore();
 
   const queryKey = useMemo(() => {
     return ['team-targets', teamId, searchQueries];
   }, [teamId, searchQueries]);
 
-  const { data: targets, status } = useTargetsQuery({ queryKey });
+  const { onOpen } = useTargetsStore();
 
-  if (status === 'pending') {
-    return <Targets.Skeleton />;
-  }
+  const debounceSearch = useDebounceCallback((searchValue) => {
+    if (searchValue !== '') {
+      setSearchQueries({
+        ...searchQueries,
+        search: searchValue,
+      });
+    } else {
+      const filteredSearchQueries = Object.fromEntries(
+        Object.entries(searchQueries).filter(([key]) => key !== 'search')
+      );
 
-  if (status === 'error') {
-    return <Targets.Error />;
-  }
-
-  if (status === 'success' && targets?.length === 0) {
-    return <Targets.Empty />;
-  }
+      setSearchQueries({
+        ...filteredSearchQueries,
+      });
+    }
+  }, 500);
 
   return (
-    <div className="border-r border-secondary col-span-4">
-      <div className="pt-4 px-6 pb-0 space-y-1.5">
+    <div className="border-r border-secondary col-span-4 flex flex-col">
+      <div className="pt-4 px-6 pb-0 space-y-1.5 relative">
         <h1 className="text-2xl font-bold">Targets</h1>
         <p className="text-gray-500">All team's targets</p>
+
+        <Button
+          onClick={() => onOpen('createTarget')}
+          className="absolute top-[10px] right-6"
+        >
+          Create +
+        </Button>
       </div>
       <div className="flex items-center gap-2 px-6 mt-4">
-        <Input />
+        <Input
+          placeholder="Search..."
+          onChange={(e) => debounceSearch(e.target.value)}
+        />
         <Button variant="ghost" className="aspect-square p-0">
           <Filter className="w-5 h-5" />
         </Button>
-        <Button variant="ghost" className="aspect-square p-0">
-          <SortAsc className="w-5 h-5" />
-        </Button>
+        <SortOptions>
+          <Button variant="ghost" className="aspect-square p-0">
+            <SortAsc className="w-5 h-5" />
+          </Button>
+        </SortOptions>
       </div>
-    </div>
-  );
-};
+      <TargetList queryKey={queryKey} />
 
-Targets.Skeleton = () => {
-  return (
-    <div className="border-r border-secondary col-span-4 flex flex-col p-6">
-      <div className="pt-4 px-6 pb-0 space-y-1.5">
-        <h1 className="text-2xl font-bold">Targets</h1>
-        <p className="text-gray-500">All team's targets</p>
-      </div>
-      <div className="flex flex-col items-center justify-center gap-2 p-6 flex-1">
-        <Loader className="w-7 h-7 animate-spin" />
-        <p className="text-sm italic">Loading...</p>
-      </div>
-    </div>
-  );
-};
-
-Targets.Error = () => {
-  return (
-    <div className="border-r border-secondary col-span-4 flex flex-col">
-      <div className="pt-4 px-6 pb-0 space-y-1.5">
-        <h1 className="text-2xl font-bold">Targets</h1>
-        <p className="text-gray-500">All team's targets</p>
-      </div>
-      <div className="flex flex-col items-center justify-center gap-2 p-6 flex-1">
-        <ServerCrash className="w-7 h-7" />
-        <p className="text-sm italic">Something went wrong.</p>
-      </div>
-    </div>
-  );
-};
-
-Targets.Empty = () => {
-  return (
-    <div className="border-r border-secondary col-span-4 flex flex-col">
-      <div className="pt-4 px-6 pb-0 space-y-1.5">
-        <h1 className="text-2xl font-bold">Targets</h1>
-        <p className="text-gray-500">All team's targets</p>
-      </div>
-      <div className="flex flex-col items-center justify-center gap-2 p-6 flex-1">
-        <ArchiveX className="w-7 h-7" />
-        <p className="text-sm italic">No targets found.</p>
-        <Button>Create Target +</Button>
-      </div>
+      {/* Modals */}
+      <CreateTargetModal queryKey={queryKey} />
+      <UpdateTargetModal queryKey={queryKey} />
+      <ConfirmDeleteTargetModal queryKey={queryKey} />
     </div>
   );
 };
