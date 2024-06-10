@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TargetController;
+use App\Http\Controllers\TargetTaskController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,16 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::prefix('teams')->group(function () {
     Route::prefix('targets')->group(function () {
+        Route::prefix('tasks')->group(function () {
+            Route::controller(TargetTaskController::class)->group(function () {
+                Route::get('/', 'index');
+                Route::get('{taskId}', 'show');
+                Route::post('/', 'store');
+                Route::patch('/{taskId}', 'update');
+                Route::delete('/{taskId}', 'destroy');
+            });
+        });
+
         Route::controller(TargetController::class)->group(function () {
             Route::get('/', 'index');
             Route::get('{targetId}', 'show');
@@ -41,6 +52,7 @@ Route::prefix('teams')->group(function () {
 
     Route::controller(TeamController::class)->group(function () {
         Route::get('/', 'index');
+        Route::get('/{teamId}/leaderboard', 'getLeaderBoard');
         Route::get('/{teamId}/role', 'getAuthUserRole');
         Route::get('{teamId}', 'show');
         Route::post('/', 'store');

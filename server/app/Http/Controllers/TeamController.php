@@ -85,4 +85,17 @@ class TeamController extends Controller
 
         return response()->json($team);
     }
+
+    public function getLeaderBoard(Request $request, $teamId)
+    {
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+
+        /** @var \App\Models\Team $team */
+        $team = $user->joinedTeams()->findOrFail($teamId);
+
+        $members = $team->members()->with(['user'])->get();
+
+        return response()->json($members);
+    }
 }

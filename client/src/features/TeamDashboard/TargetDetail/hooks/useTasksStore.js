@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-const useTargetsStore = create((set) => ({
+const useTasksStore = create((set) => ({
   type: null,
   data: {},
   isOpen: false,
@@ -10,8 +10,8 @@ const useTargetsStore = create((set) => ({
   searchQueries: {},
   setSearchQueries: (searchQueries) => set({ searchQueries }),
 
-  selectedTargetId: null,
-  setSelectedTargetId: (targetId) => set({ selectedTargetId: targetId }),
+  selectedTaskId: null,
+  setSelectedTaskId: (taskId) => set({ selectedTaskId: taskId }),
 }));
 
-export default useTargetsStore;
+export default useTasksStore;
