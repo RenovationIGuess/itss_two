@@ -4,7 +4,7 @@ import TargetTasksSection from './TargetTasksSection';
 
 const TargetDetail = () => {
   return (
-    <div className="border-r border-secondary col-span-4 flex flex-col">
+    <div className="border-r border-secondary col-span-3 flex flex-col">
       <TargetDetailSection />
       <TargetTasksSection />
     </div>

@@ -39,7 +39,7 @@ const Targets = () => {
   }, 500);
 
   return (
-    <div className="border-r border-secondary col-span-4 flex flex-col">
+    <div className="border-r border-secondary col-span-3 flex flex-col">
       <div className="pt-4 px-6 pb-0 space-y-1.5 relative">
         <h1 className="text-2xl font-bold">Targets</h1>
         <p className="text-gray-500">All team's targets</p>

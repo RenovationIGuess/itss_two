@@ -31,6 +31,7 @@ const TargetList = ({ queryKey }) => {
             description={target.description}
             due={target.due}
             exp={target.exp}
+            completed={target.is_completed}
           />
         ))}
       </div>

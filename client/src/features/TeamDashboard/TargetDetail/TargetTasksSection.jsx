@@ -6,7 +6,7 @@ import useTargetsStore from '../Targets/hooks/useTargetsStore';
 import useTasksStore from './hooks/useTasksStore';
 import { useDebounceCallback } from 'usehooks-ts';
 import { useParams } from 'react-router-dom';
-import SortOptions from '../Targets/components/SortOptions';
+import SortOptions from './components/SortOptions';
 import TargetTaskList from './TargetTaskList';
 import CreateTaskModal from './Modals/CreateTaskModal';
 import UpdateTaskModal from './Modals/UpdateTaskModal';
