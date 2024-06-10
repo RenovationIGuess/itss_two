@@ -16,16 +16,16 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from '~/components/ui/context-menu';
-import useTargetsStore from './hooks/useTargetsStore';
+import useTasksStore from './hooks/useTasksStore';
 
-const TargetItem = ({ targetId, title, due, description, exp }) => {
-  const { onOpen, setSelectedTargetId } = useTargetsStore();
+const TargetTaskItem = ({ taskId, title, due, description, exp }) => {
+  const { onOpen, setSelectedTaskId } = useTasksStore();
 
   return (
     <ContextMenu>
       <ContextMenuTrigger>
         <Card
-          onClick={() => setSelectedTargetId(targetId)}
+          onClick={() => setSelectedTaskId(taskId)}
           className="cursor-pointer hover:shadow-md"
         >
           <CardHeader>
@@ -46,8 +46,8 @@ const TargetItem = ({ targetId, title, due, description, exp }) => {
       <ContextMenuContent>
         <ContextMenuItem
           onClick={() =>
-            onOpen('updateTarget', {
-              targetId,
+            onOpen('updateTask', {
+              taskId,
               title,
               due,
               description,
@@ -60,7 +60,7 @@ const TargetItem = ({ targetId, title, due, description, exp }) => {
           Update
         </ContextMenuItem>
         <ContextMenuItem
-          onClick={() => onOpen('deleteTarget', { targetId })}
+          onClick={() => onOpen('deleteTask', { taskId })}
           className="cursor-pointer"
         >
           <Trash className="w-4 h-4 mr-2" />
@@ -71,4 +71,4 @@ const TargetItem = ({ targetId, title, due, description, exp }) => {
   );
 };
 
-export default TargetItem;
+export default TargetTaskItem;
