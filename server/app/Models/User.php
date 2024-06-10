@@ -101,4 +101,10 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(TargetTask::class);
     }
+
+    public function scopeWithTeamProfile($query, $teamId)
+    {
+        /** @var \App\Models\Team $team */
+        $team = $this->joinedTeams()->findOrFail($teamId);
+    }
 }

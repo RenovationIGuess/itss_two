@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('due')->nullable();
             $table->integer('exp')->default(5);
+            $table->boolean('completed')->default(false);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('target_id')->references('id')->on('targets')->onDelete('cascade');

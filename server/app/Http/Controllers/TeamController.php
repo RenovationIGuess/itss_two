@@ -73,7 +73,7 @@ class TeamController extends Controller
         $user = auth()->user();
 
         /** @var \App\Models\Team $team */
-        $team = Team::findOrFail($data['name']);
+        $team = Team::where('name', '=', $data['name'])->firstOrFail();
 
         if (!$team->members()->where('user_id', $user->id)->exists()) {
             // Create a pivot instance
@@ -94,7 +94,7 @@ class TeamController extends Controller
         /** @var \App\Models\Team $team */
         $team = $user->joinedTeams()->findOrFail($teamId);
 
-        $members = $team->members()->with(['user'])->get();
+        $members = $team->members()->orderBy('pivot_exp', 'desc')->get();
 
         return response()->json($members);
     }

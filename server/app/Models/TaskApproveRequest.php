@@ -19,6 +19,13 @@ class TaskApproveRequest extends Model
         'user_id',
     ];
 
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->attributes['status'] = 'pending';
+    }
+
     public function task()
     {
         return $this->belongsTo(TargetTask::class, 'task_id');
