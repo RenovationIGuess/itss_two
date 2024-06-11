@@ -111,9 +111,11 @@ const RequestItem = ({
                 </div>
               )}
               {authUserRole !== 'admin' && (
-                <Badge variant={statusVariant} className={'cursor-pointer'}>
-                  {status}
-                </Badge>
+                <div className="flex items-center gap-2 ml-auto">
+                  <Badge variant={statusVariant} className={'cursor-pointer'}>
+                    {status}
+                  </Badge>
+                </div>
               )}
             </CardFooter>
           </div>

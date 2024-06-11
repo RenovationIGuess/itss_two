@@ -11,10 +11,12 @@ import { useDebounceCallback } from 'usehooks-ts';
 import SortOptions from './components/SortOptions';
 import TargetList from './TargetList';
 import FilterOptions from './components/FilterOptions';
+import useTeamStore from '../hooks/useTeamStore';
 
 const Targets = () => {
   const { id: teamId } = useParams();
   const { searchQueries, setSearchQueries } = useTargetsStore();
+  const { authUserRole } = useTeamStore();
 
   const queryKey = useMemo(() => {
     return ['team-targets', teamId, searchQueries];
@@ -44,13 +46,15 @@ const Targets = () => {
       <div className="pt-4 px-6 pb-0 space-y-1.5 relative">
         <h1 className="text-2xl font-bold">Targets</h1>
         <p className="text-gray-500">All team's targets</p>
-
-        <Button
-          onClick={() => onOpen('createTarget')}
-          className="absolute top-[10px] right-6"
-        >
-          Create +
-        </Button>
+        {
+          authUserRole === 'admin' &&
+          <Button
+            onClick={() => onOpen('createTarget')}
+            className="absolute top-[10px] right-6"
+          >
+            Create +
+          </Button>
+        }
       </div>
       <div className="flex items-center gap-2 px-6 mt-4">
         <Input
