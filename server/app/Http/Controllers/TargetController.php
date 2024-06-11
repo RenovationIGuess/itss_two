@@ -28,7 +28,7 @@ class TargetController extends Controller
 
         if ($request->has('date')) {
             $date = $request->input('date');
-            $query->whereDate('due', $date);
+            $query->where('due', 'like', "%$date%");
         }
 
         // if ($request->has('status')) {

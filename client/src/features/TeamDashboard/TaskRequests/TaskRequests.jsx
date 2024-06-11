@@ -19,6 +19,7 @@ const TaskRequests = () => {
   const { selectedTargetId } = useTargetsStore();
   const { selectedTaskId } = useTasksStore();
   const { searchQueries, setSearchQueries } = useRequestStore();
+  const { authUserRequestCreated } = useRequestStore();
 
   const queryKey = useMemo(() => {
     return [
@@ -78,6 +79,7 @@ const TaskRequests = () => {
           onClick={() => onOpen('createRequest')}
           variant="ghost"
           className="aspect-square p-0"
+          disabled={authUserRequestCreated}
         >
           <Plus className="w-5 h-5" />
         </Button>

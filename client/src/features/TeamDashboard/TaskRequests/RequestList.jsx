@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import RequestItem from './RequestItem';
 import { ScrollArea } from '~/components/ui/scroll-area';
 import { ArchiveX, Loader, ServerCrash } from 'lucide-react';
@@ -6,10 +6,23 @@ import { Button } from '~/components/ui/button';
 import useRequestStore from './hooks/useRequestStore';
 import useTasksStore from '../TargetDetail/hooks/useTasksStore';
 import { useRequestQuery } from './hooks/useRequestQuery';
+import { userStateContext } from '~/contexts/ContextProvider';
 
 const RequestList = ({ queryKey }) => {
+  const { currentUser } = userStateContext();
   const { selectedTaskId } = useTasksStore();
+  const { setAuthUserRequestCreated } = useRequestStore();
   const { data: requests, status } = useRequestQuery({ queryKey });
+
+  useEffect(() => {
+    if (!requests) return;
+
+    const authUserCreatedRequest = requests.some(
+      (request) => request.user.id === currentUser.id
+    );
+
+    setAuthUserRequestCreated(authUserCreatedRequest);
+  }, [requests]);
 
   if (!selectedTaskId) {
     return null;

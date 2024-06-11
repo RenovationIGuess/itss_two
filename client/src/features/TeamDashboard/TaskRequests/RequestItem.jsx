@@ -52,8 +52,10 @@ const RequestItem = ({
   }, [status]);
 
   return (
-    <ContextMenu disable={currentUser.id !== creatorId}>
-      <ContextMenuTrigger>
+    <ContextMenu>
+      <ContextMenuTrigger
+        disabled={currentUser.id !== creatorId && authUserRole !== 'admin'}
+      >
         <Card className="relative">
           <div className="space-y-2">
             <CardHeader className="p-3 pb-0">

@@ -9,6 +9,10 @@ const useRequestStore = create((set) => ({
 
   searchQueries: {},
   setSearchQueries: (searchQueries) => set({ searchQueries }),
+
+  authUserRequestCreated: false,
+  setAuthUserRequestCreated: (authUserRequestCreated) =>
+    set({ authUserRequestCreated }),
 }));
 
 export default useRequestStore;
