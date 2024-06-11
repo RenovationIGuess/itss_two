@@ -22,9 +22,11 @@ class TaskApproveRequestController extends Controller
 
         $query = $task->taskApproveRequests()->with(['user']);
 
-        if ($request->has('user_id')) {
-            $userId = $request->input('user_id');
-            $query->where('user_id', $userId);
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%');
+            });
         }
 
         if ($request->has('status')) {

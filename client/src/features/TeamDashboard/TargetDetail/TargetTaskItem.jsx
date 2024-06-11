@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { Check, Edit2, Trash } from 'lucide-react';
+import { Check, CheckIcon, Edit2, Square, Trash } from 'lucide-react';
 import React from 'react';
 import { Badge } from '~/components/ui/badge';
 import {
@@ -18,6 +18,9 @@ import {
 } from '~/components/ui/context-menu';
 import useTasksStore from './hooks/useTasksStore';
 import { cn } from '~/utils';
+import { userStateContext } from '~/contexts/ContextProvider';
+import { M7_AVATAR } from '~/constants/images';
+import { useTaskActions } from './hooks/useTaskActions';
 
 const TargetTaskItem = ({
   taskId,
@@ -27,8 +30,17 @@ const TargetTaskItem = ({
   exp,
   completed,
   createdByAdmin,
+  creatorId,
+  creatorName,
+  creatorAvatar,
+  queryKey,
 }) => {
+  const { currentUser } = userStateContext();
   const { onOpen, selectedTaskId, setSelectedTaskId } = useTasksStore();
+
+  const { updating, updateTask } = useTaskActions({
+    queryKey,
+  });
 
   return (
     <ContextMenu>
@@ -40,18 +52,46 @@ const TargetTaskItem = ({
             selectedTaskId === taskId && 'border-black'
           )}
         >
-          {completed && (
+          {createdByAdmin && completed && (
             <div className="absolute top-5 right-6 w-8 h-8 bg-black/80 rounded-full text-white flex items-center justify-center">
               <Check className="w-5 h-5" strokeWidth={3} />
             </div>
+          )}
+          {!createdByAdmin && currentUser.id === creatorId && (
+            <>
+              {completed && (
+                <div className="absolute top-5 right-6 w-8 h-8 bg-black/80 rounded-full text-white flex items-center justify-center">
+                  <CheckIcon className="w-5 h-5" strokeWidth={3} />
+                </div>
+              )}
+              {!completed && (
+                <div
+                  onClick={() =>
+                    updateTask(taskId, {
+                      completed: true,
+                    })
+                  }
+                  className="absolute top-5 right-6 w-8 h-8 bg-black/80 rounded-full text-white flex items-center justify-center"
+                >
+                  <Square className="w-5 h-5" strokeWidth={3} />
+                </div>
+              )}
+            </>
           )}
           <CardHeader>
             <CardTitle>{title}</CardTitle>
             <CardDescription>{description || 'No description'}</CardDescription>
           </CardHeader>
-          {/* <CardContent>
-            <p>Card Content</p>
-          </CardContent> */}
+          <CardContent className="">
+            <div className="flex items-center gap-2">
+              <span>Created By:</span>
+              <img
+                src={creatorAvatar || M7_AVATAR}
+                className="w-6 h-6 rounded-full object-cover"
+              />
+              <span className="font-bold">{creatorName}</span>
+            </div>
+          </CardContent>
           <CardFooter className="flex items-center justify-between">
             <p className="text-sm">
               {due ? format(new Date(due), 'MM/dd/yyyy') : 'Not specified'}

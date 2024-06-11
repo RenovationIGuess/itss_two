@@ -26,6 +26,15 @@ class TargetTaskController extends Controller
             $query->where('title', 'like', "%$search%");
         }
 
+        // if ($request->has('completed')) {
+        //     $query->where('completed', true);
+        // }
+
+        if ($request->has('created_by')) {
+            $created_by = $request->input('created_by');
+            $query->where('user_id', $created_by);
+        }
+
         if ($request->has('date')) {
             $date = $request->input('date');
             $query->whereDate('due', $date);

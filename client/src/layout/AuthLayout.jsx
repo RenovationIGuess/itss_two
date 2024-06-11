@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import axiosClient from '~/axios';
+import LogoutButton from '~/components/LogoutButton';
 import { userStateContext } from '~/contexts/ContextProvider';
 
 const AuthLayout = () => {
@@ -21,7 +22,7 @@ const AuthLayout = () => {
         .then(({ data }) => {
           // console.log(data);
           if (data.message === 'Unauthorized') {
-            navigate('/nfc/signin');
+            navigate('/sign-in');
           } else {
             const currentUser = data.data;
 
@@ -39,7 +40,7 @@ const AuthLayout = () => {
         .finally(() => setFetchingUser(false));
     } else {
       console.log('Navigated');
-      navigate('/nfc/signin');
+      navigate('/sign-in');
     }
   }, [userToken]);
 
@@ -61,6 +62,8 @@ const AuthLayout = () => {
         theme="light"
         closeButton={true}
       />
+
+      <LogoutButton />
     </div>
   );
 };
