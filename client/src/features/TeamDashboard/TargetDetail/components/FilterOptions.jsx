@@ -1,16 +1,9 @@
 import {
   // Ban,
   CheckIcon,
-  Clock12,
-  Clock3,
-  Clock6,
-  MoveDown,
-  MoveRight,
-  MoveUp,
   X,
 } from 'lucide-react';
 import React, { useCallback, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,50 +22,10 @@ import {
 } from '~/components/ui/command';
 import { cn } from '~/utils';
 import { ScrollArea } from '~/components/ui/scroll-area';
-import FilterByTags from './FilterByTags';
-import FilterByColors from './FilterByColors';
 import FilterByDate from './FilterByDate';
-
-const timeOptions = [
-  {
-    icon: Clock12,
-    value: 'not_started',
-    label: 'Not Started',
-  },
-  {
-    icon: Clock3,
-    value: 'started',
-    label: 'Already Started',
-  },
-  {
-    icon: Clock6,
-    value: 'past_due',
-    label: 'Past Due',
-  },
-];
-
-const priorityOptions = [
-  // {
-  //   icon: Ban,
-  //   value: 'none',
-  //   label: 'None',
-  // },
-  {
-    icon: MoveDown,
-    value: 'low',
-    label: 'Low',
-  },
-  {
-    icon: MoveRight,
-    value: 'medium',
-    label: 'Medium',
-  },
-  {
-    icon: MoveUp,
-    value: 'high',
-    label: 'High',
-  },
-];
+import { useLeaderboardQuery } from '../../Leaderboard/hooks/useLeaderboardQuery';
+import useTasksStore from '../hooks/useTasksStore';
+import { M7_AVATAR } from '~/constants/images';
 
 const FilterOptions = ({
   children,
@@ -80,67 +33,47 @@ const FilterOptions = ({
   sideOffset = 5,
   align = 'start',
 }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { searchQueries, setSearchQueries } = useTasksStore();
   const [open, setOpen] = useState(false);
 
-  const handleSelectFilterByPriority = useCallback(
+  const { data: members, status } = useLeaderboardQuery({
+    queryKey: ['members'],
+  });
+
+  const handleSelectFilterByCreator = useCallback(
     (value, isSelected) => {
-      const filteredSearchParams = Object.fromEntries(
-        [...searchParams].filter(([key]) => {
-          if (isSelected) return key !== 'filter_by_priority';
+      const filteredSearchQueries = Object.fromEntries(
+        Object.entries(searchQueries).filter(([key]) => {
+          if (isSelected) return key !== 'created_by';
           return true;
         })
       );
 
       if (!isSelected) {
-        setSearchParams({
-          ...filteredSearchParams,
-          ['filter_by_priority']: value,
+        setSearchQueries({
+          ...filteredSearchQueries,
+          ['created_by']: value,
         });
       } else {
-        setSearchParams({
-          ...filteredSearchParams,
+        setSearchQueries({
+          ...filteredSearchQueries,
         });
       }
     },
-    [searchParams]
-  );
-
-  const handleSelectFilterByTime = useCallback(
-    (value, isSelected) => {
-      const filteredSearchParams = Object.fromEntries(
-        [...searchParams].filter(([key]) => {
-          if (isSelected)
-            return key !== 'filter_by_time' && key !== 'filter_date';
-          return key !== 'filter_date';
-        })
-      );
-
-      if (!isSelected) {
-        setSearchParams({
-          ...filteredSearchParams,
-          ['filter_by_time']: value,
-        });
-      } else {
-        setSearchParams({
-          ...filteredSearchParams,
-        });
-      }
-    },
-    [searchParams]
+    [searchQueries]
   );
 
   const handleClearFilter = useCallback(() => {
     // Only keep the sorting params
-    const filteredSearchParams = Object.fromEntries(
-      [...searchParams].filter(
+    const filteredSearchQueries = Object.fromEntries(
+      Object.entries(searchQueries).filter(
         ([key]) => key === 'sort_by' || key === 'sort_type'
       )
     );
-    setSearchParams({
-      ...filteredSearchParams,
+    setSearchQueries({
+      ...filteredSearchQueries,
     });
-  }, [searchParams]);
+  }, [searchQueries]);
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -159,67 +92,25 @@ const FilterOptions = ({
             <X className="h-4 w-4 mr-1.5" />
             Clear Filters
           </DropdownMenuItem>
-          <DropdownMenuLabel className="text-xs font-bold text-zinc-400 uppercase">
-            Filter by Time
-          </DropdownMenuLabel>
-          <Command>
-            <CommandInput placeholder={'Sort options...'} />
-            <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
-              <CommandGroup>
-                {timeOptions.map((option) => {
-                  const isSelected =
-                    searchParams.has('filter_by_time') &&
-                    searchParams.get('filter_by_time') === option.value;
-
-                  return (
-                    <CommandItem
-                      key={option.value}
-                      onSelect={() => {
-                        handleSelectFilterByTime(option.value, isSelected);
-                      }}
-                    >
-                      <div
-                        className={cn(
-                          'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-                          isSelected
-                            ? 'bg-primary text-primary-foreground'
-                            : 'opacity-50 [&_svg]:invisible'
-                        )}
-                      >
-                        <CheckIcon className={cn('h-4 w-4')} />
-                      </div>
-                      {option.icon && (
-                        <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                      )}
-                      <span>{option.label}</span>
-                    </CommandItem>
-                  );
-                })}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-          {/* <DropdownMenuSeparator /> */}
           <FilterByDate />
           <DropdownMenuSeparator />
           <DropdownMenuLabel className="text-xs font-bold text-zinc-400 uppercase">
-            Filter by Priority
+            Filter by Creator
           </DropdownMenuLabel>
           <Command>
             <CommandInput placeholder={'Sort options...'} />
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
-                {priorityOptions.map((option) => {
+                {members?.map(({ id, name, avatar }) => {
                   const isSelected =
-                    searchParams.has('filter_by_priority') &&
-                    searchParams.get('filter_by_priority') === option.value;
+                    searchQueries.created_by && searchQueries.created_by === id;
 
                   return (
                     <CommandItem
-                      key={option.value}
+                      key={id}
                       onSelect={() => {
-                        handleSelectFilterByPriority(option.value, isSelected);
+                        handleSelectFilterByCreator(id, isSelected);
                       }}
                     >
                       <div
@@ -232,20 +123,17 @@ const FilterOptions = ({
                       >
                         <CheckIcon className={cn('h-4 w-4')} />
                       </div>
-                      {option.icon && (
-                        <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-                      )}
-                      <span>{option.label}</span>
+                      <img
+                        className="object-cover rounded-full w-6 h-6 mr-2"
+                        src={avatar || M7_AVATAR}
+                      />
+                      <span>{name}</span>
                     </CommandItem>
                   );
                 })}
               </CommandGroup>
             </CommandList>
           </Command>
-          <DropdownMenuSeparator />
-          <FilterByTags />
-          <DropdownMenuSeparator />
-          <FilterByColors />
         </ScrollArea>
       </DropdownMenuContent>
     </DropdownMenu>

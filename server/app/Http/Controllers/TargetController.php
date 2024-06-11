@@ -31,6 +31,10 @@ class TargetController extends Controller
             $query->whereDate('due', $date);
         }
 
+        // if ($request->has('status')) {
+
+        // }
+
         if ($request->has('sort_type')) {
             $sort_type = $request->input('sort_type');
             switch ($sort_type) {

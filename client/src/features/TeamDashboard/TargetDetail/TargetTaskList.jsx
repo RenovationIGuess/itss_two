@@ -38,8 +38,16 @@ const TargetTaskList = ({ queryKey }) => {
             description={task.description}
             due={task.due}
             exp={task.exp}
-            completed={task.completed_by_all_members}
+            completed={
+              task.created_by_admin
+                ? task.completed_by_all_members
+                : task.completed
+            }
             createdByAdmin={task.created_by_admin}
+            creatorId={task.user_id}
+            creatorName={task.user.name}
+            creatorAvatar={task.user.avatar}
+            queryKey={queryKey}
           />
         ))}
       </div>

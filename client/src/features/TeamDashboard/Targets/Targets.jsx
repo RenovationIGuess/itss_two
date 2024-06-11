@@ -10,6 +10,7 @@ import ConfirmDeleteTargetModal from './Modals/ConfirmDeleteTargetModal';
 import { useDebounceCallback } from 'usehooks-ts';
 import SortOptions from './components/SortOptions';
 import TargetList from './TargetList';
+import FilterOptions from './components/FilterOptions';
 
 const Targets = () => {
   const { id: teamId } = useParams();
@@ -56,9 +57,11 @@ const Targets = () => {
           placeholder="Search..."
           onChange={(e) => debounceSearch(e.target.value)}
         />
-        <Button variant="ghost" className="aspect-square p-0">
-          <Filter className="w-5 h-5" />
-        </Button>
+        <FilterOptions align="end" side="bottom">
+          <Button variant="ghost" className="aspect-square p-0">
+            <Filter className="w-5 h-5" />
+          </Button>
+        </FilterOptions>
         <SortOptions>
           <Button variant="ghost" className="aspect-square p-0">
             <SortAsc className="w-5 h-5" />

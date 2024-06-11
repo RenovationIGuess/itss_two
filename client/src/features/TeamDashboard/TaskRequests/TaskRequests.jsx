@@ -7,11 +7,12 @@ import { useDebounceCallback } from 'usehooks-ts';
 import { Input } from '~/components/ui/input';
 import SortOptions from './components/SortOptions';
 import { Button } from '~/components/ui/button';
-import { Filter, Plus, SortAsc } from 'lucide-react';
+import { Filter, ListTodo, Plus, SortAsc } from 'lucide-react';
 import RequestList from './RequestList';
 import ConfirmDeleteRequestModal from './Modals/ConfirmDeleteRequestModal';
 import CreateRequestModal from './Modals/CreateRequestModal';
 import UpdateRequestModal from './Modals/UpdateRequestModal';
+import FilterOptions from './components/FilterOptions';
 
 const TaskRequests = () => {
   const { id: teamId } = useParams();
@@ -49,7 +50,7 @@ const TaskRequests = () => {
   }, 500);
 
   if (!selectedTaskId || !selectedTargetId) {
-    return null;
+    return <TaskRequests.NoTaskSelected />;
   }
 
   return (
@@ -63,9 +64,11 @@ const TaskRequests = () => {
           placeholder="Search..."
           onChange={(e) => debounceSearch(e.target.value)}
         />
-        <Button variant="ghost" className="aspect-square p-0">
-          <Filter className="w-5 h-5" />
-        </Button>
+        <FilterOptions side="bottom" align="end">
+          <Button variant="ghost" className="aspect-square p-0">
+            <Filter className="w-5 h-5" />
+          </Button>
+        </FilterOptions>
         <SortOptions>
           <Button variant="ghost" className="aspect-square p-0">
             <SortAsc className="w-5 h-5" />
@@ -85,6 +88,19 @@ const TaskRequests = () => {
       <ConfirmDeleteRequestModal queryKey={queryKey} />
       <CreateRequestModal queryKey={queryKey} />
       <UpdateRequestModal queryKey={queryKey} />
+    </div>
+  );
+};
+
+TaskRequests.NoTaskSelected = () => {
+  return (
+    <div className="col-span-3 flex flex-col">
+      <div className="pt-4 px-6 pb-0 h-32 flex items-center justify-center relative">
+        <div className="flex flex-col items-center justify-center gap-2">
+          <ListTodo className="w-7 h-7" />
+          <p className="text-sm">No Task Selected</p>
+        </div>
+      </div>
     </div>
   );
 };

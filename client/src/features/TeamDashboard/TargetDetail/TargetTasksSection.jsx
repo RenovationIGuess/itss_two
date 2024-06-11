@@ -11,6 +11,7 @@ import TargetTaskList from './TargetTaskList';
 import CreateTaskModal from './Modals/CreateTaskModal';
 import UpdateTaskModal from './Modals/UpdateTaskModal';
 import ConfirmDeleteTaskModal from './Modals/ConfirmDeleteTaskModal';
+import FilterOptions from './components/FilterOptions';
 
 const TargetTasksSection = () => {
   const { id: teamId } = useParams();
@@ -51,9 +52,11 @@ const TargetTasksSection = () => {
           placeholder="Search..."
           onChange={(e) => debounceSearch(e.target.value)}
         />
-        <Button variant="ghost" className="aspect-square p-0">
-          <Filter className="w-5 h-5" />
-        </Button>
+        <FilterOptions align="end" side="bottom">
+          <Button variant="ghost" className="aspect-square p-0">
+            <Filter className="w-5 h-5" />
+          </Button>
+        </FilterOptions>
         <SortOptions>
           <Button variant="ghost" className="aspect-square p-0">
             <SortAsc className="w-5 h-5" />
