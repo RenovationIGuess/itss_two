@@ -63,16 +63,16 @@ class TaskApproveRequestController extends Controller
         /** @var \App\Models\Team $team */
         $team = $request->team;
 
-        $auth_user_team_profile = $team->members()->where('user_id', $user->id)->first();
-        $auth_user_team_role = $auth_user_team_profile->pivot->role;
+        // $auth_user_team_profile = $team->members()->where('user_id', $user->id)->first();
+        // $auth_user_team_role = $auth_user_team_profile->pivot->role;
 
         /** @var \App\Models\TargetTask $task */
         $task = $request->task;
 
         // Only admin can approve the request
-        if ($auth_user_team_role !== 'admin') {
-            return response()->json(['message' => 'Forbidden'], 403);
-        }
+        // if ($auth_user_team_role !== 'admin') {
+        //     return response()->json(['message' => 'Forbidden'], 403);
+        // }
 
         $task_creator_role = $team->members()->where('user_id', $task->user_id)->first()->pivot->role;
 

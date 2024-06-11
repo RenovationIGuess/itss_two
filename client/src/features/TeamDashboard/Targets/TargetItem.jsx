@@ -18,13 +18,15 @@ import {
 } from '~/components/ui/context-menu';
 import useTargetsStore from './hooks/useTargetsStore';
 import { cn } from '~/utils';
+import useTeamStore from '../hooks/useTeamStore';
 
 const TargetItem = ({ targetId, title, due, description, exp, completed }) => {
+  const { authUserRole } = useTeamStore();
   const { onOpen, selectedTargetId, setSelectedTargetId } = useTargetsStore();
 
   return (
     <ContextMenu>
-      <ContextMenuTrigger>
+      <ContextMenuTrigger disabled={authUserRole !== 'admin'}>
         <Card
           onClick={() => setSelectedTargetId(targetId)}
           className={cn(

@@ -21,6 +21,7 @@ import { cn } from '~/utils';
 import { userStateContext } from '~/contexts/ContextProvider';
 import { M7_AVATAR } from '~/constants/images';
 import { useTaskActions } from './hooks/useTaskActions';
+import useTeamStore from '../hooks/useTeamStore';
 
 const TargetTaskItem = ({
   taskId,
@@ -36,6 +37,7 @@ const TargetTaskItem = ({
   queryKey,
 }) => {
   const { currentUser } = userStateContext();
+  const { authUserRole } = useTeamStore();
   const { onOpen, selectedTaskId, setSelectedTaskId } = useTasksStore();
 
   const { updating, updateTask } = useTaskActions({
@@ -44,9 +46,15 @@ const TargetTaskItem = ({
 
   return (
     <ContextMenu>
-      <ContextMenuTrigger>
+      <ContextMenuTrigger
+        disabled={authUserRole !== 'admin' && currentUser.id !== creatorId}
+      >
         <Card
-          onClick={() => createdByAdmin && setSelectedTaskId(taskId)}
+          onClick={() =>
+            createdByAdmin &&
+            authUserRole === 'admin' &&
+            setSelectedTaskId(taskId)
+          }
           className={cn(
             'cursor-pointer hover:shadow-md relative',
             selectedTaskId === taskId && 'border-black'
