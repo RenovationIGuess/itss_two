@@ -4,12 +4,6 @@ import { useLeaderboardQuery } from './hooks/useLeaderboardQuery';
 import { Loader, SearchX, ServerCrash } from 'lucide-react';
 import { ScrollArea } from '~/components/ui/scroll-area';
 import MemberCard from './MemberCard';
-import XPBoard from '~/features/TeamDashboard/Targets/XPBoard'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover"
 
 const Leaderboard = () => {
   const { id: teamId } = useParams();
@@ -43,8 +37,6 @@ const Leaderboard = () => {
       <ScrollArea className="flex-1 min-h-0 min-w-0 overflow-x-hidden overflow-y-auto px-6 pb-6 pt-4">
         <div className="flex flex-col gap-4">
           {leaderboard.map((member, index) => (
-            <Popover>
-            <PopoverTrigger>
             <MemberCard
               key={member.id}
               index={index}
@@ -54,20 +46,6 @@ const Leaderboard = () => {
               role={member.pivot.role}
               exp={member.pivot.exp}
             />
-      </PopoverTrigger>
-      <PopoverContent className="fixed w-[420px] inset-0 flex items-center justify-center">
-                <div className="w-[100%] h-[400px] p-4 bg-white rounded-md overflow-auto">
-                  <div className="mb-4">
-                    <MemberCard
-                      index={index}
-                      name={member.name}
-                      exp={member.pivot.exp}
-                    />
-                  </div>
-                  <XPBoard />
-                </div>
-              </PopoverContent>
-            </Popover>
           ))}
         </div>
       </ScrollArea>

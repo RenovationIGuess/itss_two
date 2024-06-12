@@ -5,7 +5,7 @@ import useTargetsStore from './hooks/useTargetsStore';
 import { ScrollArea } from '~/components/ui/scroll-area';
 import TargetItem from './TargetItem';
 
-const TargetList = ({ queryKey, authUserRole }) => { 
+const TargetList = ({ queryKey }) => {
   const { data: targets, status } = useTargetsQuery({ queryKey });
 
   if (status === 'pending') {
@@ -17,7 +17,7 @@ const TargetList = ({ queryKey, authUserRole }) => {
   }
 
   if (targets.length === 0) {
-    return <TargetList.Empty authUserRole={authUserRole} />; 
+    return <TargetList.Empty />;
   }
 
   return (
@@ -57,23 +57,14 @@ TargetList.Error = () => {
   );
 };
 
-TargetList.Empty = ({ authUserRole }) => { 
+TargetList.Empty = ({ queryKey }) => {
   const { onOpen } = useTargetsStore();
 
   return (
     <div className="flex flex-col items-center justify-center gap-2 p-6 flex-1">
       <ArchiveX className="w-7 h-7" />
       <p className="text-sm italic">No targets found.</p>
-      {
-        authUserRole === 'admin' && ( 
-          <Button
-          onClick={() => onOpen('createTarget')}
-          className="absolute top-[10px] right-6"
-        >
-          Create +
-        </Button>
-        )
-      }
+      <Button onClick={() => onOpen('createTarget')}>Create Target +</Button>
     </div>
   );
 };
