@@ -18,6 +18,13 @@ class Team extends Model
         'join_code',
     ];
 
+    protected $appends = [
+        'members_count',
+        'targets_count',
+        'tasks_count',
+        'requests_count'
+    ];
+
     public function creator()
     {
         return $this->belongsTo(User::class);
@@ -33,5 +40,31 @@ class Team extends Model
     public function targets()
     {
         return $this->hasMany(Target::class);
+    }
+
+    public function getMembersCountAttribute()
+    {
+        return $this->members()->count();
+    }
+
+    public function getTargetsCountAttribute()
+    {
+        return $this->targets()->count();
+    }
+
+    public function getTasksCountAttribute()
+    {
+        return $this->targets()->with('tasks')->get()->sum(function ($target) {
+            return $target->tasks->count();
+        });
+    }
+
+    public function getRequestsCountAttribute()
+    {
+        return $this->targets()->with('tasks')->get()->sum(function ($target) {
+            return $target->tasks()->with('taskApproveRequests')->get()->sum(function ($task) {
+                return $task->taskApproveRequests->count();
+            });
+        });
     }
 }

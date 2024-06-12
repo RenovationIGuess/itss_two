@@ -30,28 +30,12 @@ export const useRequestQuery = ({ queryKey }) => {
     });
 
     try {
-      // Call API
-      // const response = await fetch(apiUrl, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${localStorage.getItem('TOKEN')}`,
-      //   },
-      // });
-
-      // if (!response.ok) {
-      //   toast.error('Failed to fetch tasks', {
-      //     position: 'bottom-right',
-      //   });
-      //   throw new Error('Failed to fetch tasks');
-      // }
-
       const responseData = await axiosClient.get(apiUrl);
       return responseData.data;
     } catch (error) {
       console.error(error);
     }
-  }, [searchQueries, teamId]);
+  }, [searchQueries, teamId, selectedTargetId, selectedTaskId]);
 
   const { data, status } = useQuery({
     queryKey,

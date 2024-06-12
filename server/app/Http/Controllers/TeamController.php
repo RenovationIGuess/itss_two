@@ -12,6 +12,22 @@ class TeamController extends Controller
     {
     }
 
+    public function getAuthUserProfile(Request $request, $teamId)
+    {
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+
+        /** @var \App\Models\Team $team */
+        $team = $user->joinedTeams()->findOrFail($teamId);
+
+        $role = $team->members()
+            ->where('user_id', $user->id)
+            ->first()
+            ->pivot;
+
+        return response()->json($role);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

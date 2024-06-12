@@ -23,22 +23,6 @@ export const useTargetQuery = ({ queryKey }) => {
     });
 
     try {
-      // Call API
-      // const response = await fetch(apiUrl, {
-      //   method: 'GET',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `Bearer ${localStorage.getItem('TOKEN')}`,
-      //   },
-      // });
-
-      // if (!response.ok) {
-      //   toast.error('Failed to fetch target', {
-      //     position: 'bottom-right',
-      //   });
-      //   throw new Error('Failed to fetch target');
-      // }
-
       const responseData = await axiosClient.get(apiUrl);
       return responseData.data;
     } catch (error) {

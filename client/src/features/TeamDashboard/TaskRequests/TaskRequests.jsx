@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import useTargetsStore from '../Targets/hooks/useTargetsStore';
 import useTasksStore from '../TargetDetail/hooks/useTasksStore';
 import useRequestStore from './hooks/useRequestStore';
@@ -13,13 +13,20 @@ import ConfirmDeleteRequestModal from './Modals/ConfirmDeleteRequestModal';
 import CreateRequestModal from './Modals/CreateRequestModal';
 import UpdateRequestModal from './Modals/UpdateRequestModal';
 import FilterOptions from './components/FilterOptions';
+import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs';
+import useTeamStore from '../hooks/useTeamStore';
+import LevelDetail from '../LevelDetail/LevelDetail';
 
 const TaskRequests = () => {
+  const { authUserRole } = useTeamStore();
   const { id: teamId } = useParams();
   const { selectedTargetId } = useTargetsStore();
   const { selectedTaskId } = useTasksStore();
   const { searchQueries, setSearchQueries } = useRequestStore();
   const { authUserRequestCreated } = useRequestStore();
+
+  // ['requests', 'levels']
+  const [view, setView] = useState('requests');
 
   const queryKey = useMemo(() => {
     return [
@@ -50,12 +57,28 @@ const TaskRequests = () => {
     }
   }, 500);
 
+  if (view === 'levels' || authUserRole !== 'admin') {
+    return <LevelDetail />;
+  }
+
   if (!selectedTaskId || !selectedTargetId) {
     return <TaskRequests.NoTaskSelected />;
   }
 
   return (
-    <div className="col-span-3 flex flex-col">
+    <div className="col-span-3 flex flex-col overflow-hidden">
+      {authUserRole === 'admin' && (
+        <Tabs
+          className="px-6 pt-4"
+          value={view}
+          onValueChange={(value) => setView(value)}
+        >
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="requests">Requests</TabsTrigger>
+            <TabsTrigger value="levels">Levels</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      )}
       <div className="pt-4 px-6 pb-0 space-y-1.5 relative">
         <h1 className="text-2xl font-bold">Requests</h1>
         <p className="text-gray-500">All task's approve requests</p>
