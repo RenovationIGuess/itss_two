@@ -14,7 +14,7 @@ export const useLeaderboardQuery = ({ queryKey }) => {
     }
 
     const apiUrl = qs.stringifyUrl({
-      url: `/api/teams/${teamId}/leaderboard`,
+      url: `/teams/${teamId}/leaderboard`,
     });
 
     try {
