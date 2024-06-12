@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import useTasksStore from './useTasksStore';
 import useTargetsStore from '../../Targets/hooks/useTargetsStore';
+import axiosClient from '~/axios';
 
 export const useTasksQuery = ({ queryKey }) => {
   const { id: teamId } = useParams();

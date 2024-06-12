@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
+import axiosClient from '~/axios';
 
 export const useTargetsQuery = ({ queryKey }) => {
   const { id: teamId } = useParams();

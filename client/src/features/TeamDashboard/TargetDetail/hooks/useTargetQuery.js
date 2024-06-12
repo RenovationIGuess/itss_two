@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import useTargetsStore from '~/features/TeamDashboard/Targets/hooks/useTargetsStore';
+import axiosClient from '~/axios';
 
 export const useTargetQuery = ({ queryKey }) => {
   const { id: teamId } = useParams();
