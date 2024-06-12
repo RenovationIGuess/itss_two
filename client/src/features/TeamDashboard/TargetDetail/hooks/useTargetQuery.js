@@ -16,7 +16,7 @@ export const useTargetQuery = ({ queryKey }) => {
     }
 
     const apiUrl = qs.stringifyUrl({
-      url: `/api/teams/targets/${selectedTargetId}`,
+      url: `/teams/targets/${selectedTargetId}`,
       query: {
         team_id: teamId,
       },

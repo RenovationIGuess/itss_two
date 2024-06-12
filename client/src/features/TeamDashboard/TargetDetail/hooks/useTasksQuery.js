@@ -18,7 +18,7 @@ export const useTasksQuery = ({ queryKey }) => {
     }
 
     const apiUrl = qs.stringifyUrl({
-      url: `/api/teams/targets/tasks`,
+      url: `/teams/targets/tasks`,
       query: {
         ...searchQueries,
         team_id: teamId,

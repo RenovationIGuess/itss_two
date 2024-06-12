@@ -20,7 +20,7 @@ export const useRequestQuery = ({ queryKey }) => {
     }
 
     const apiUrl = qs.stringifyUrl({
-      url: `/api/teams/targets/tasks/approve-requests`,
+      url: `/teams/targets/tasks/approve-requests`,
       query: {
         ...searchQueries,
         team_id: teamId,

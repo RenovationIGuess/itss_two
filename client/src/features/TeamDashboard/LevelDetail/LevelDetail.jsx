@@ -28,8 +28,6 @@ const LevelDetail = () => {
     return <TaskRequests />;
   }
 
-  console.log(profile);
-
   return (
     <div className="col-span-3 flex flex-col overflow-hidden">
       {authUserRole === 'admin' && (

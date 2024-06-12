@@ -12,7 +12,7 @@ export const useTargetsQuery = ({ queryKey }) => {
 
   const fetchTargets = useCallback(async () => {
     const apiUrl = qs.stringifyUrl({
-      url: `/api/teams/targets`,
+      url: `/teams/targets`,
       query: {
         ...searchQueries,
         team_id: teamId,
