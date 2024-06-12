@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
+import axiosClient from '~/axios';
 
 export const useTargetsQuery = ({ queryKey }) => {
   const { id: teamId } = useParams();
@@ -11,7 +12,7 @@ export const useTargetsQuery = ({ queryKey }) => {
 
   const fetchTargets = useCallback(async () => {
     const apiUrl = qs.stringifyUrl({
-      url: `/api/teams/targets`,
+      url: `/teams/targets`,
       query: {
         ...searchQueries,
         team_id: teamId,
@@ -20,23 +21,23 @@ export const useTargetsQuery = ({ queryKey }) => {
 
     try {
       // Call API
-      const response = await fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('TOKEN')}`,
-        },
-      });
+      // const response = await fetch(apiUrl, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${localStorage.getItem('TOKEN')}`,
+      //   },
+      // });
 
-      if (!response.ok) {
-        toast.error('Failed to fetch targets', {
-          position: 'bottom-right',
-        });
-        throw new Error('Failed to fetch targets');
-      }
+      // if (!response.ok) {
+      //   toast.error('Failed to fetch targets', {
+      //     position: 'bottom-right',
+      //   });
+      //   throw new Error('Failed to fetch targets');
+      // }
 
-      const responseData = await response.json();
-      return responseData;
+      const responseData = await axiosClient.get(apiUrl);
+      return responseData.data;
     } catch (error) {
       console.error(error);
     }

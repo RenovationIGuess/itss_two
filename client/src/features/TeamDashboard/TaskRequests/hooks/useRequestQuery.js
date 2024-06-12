@@ -6,6 +6,7 @@ import { useCallback } from 'react';
 import useRequestStore from './useRequestStore';
 import useTargetsStore from '../../Targets/hooks/useTargetsStore';
 import useTasksStore from '../../TargetDetail/hooks/useTasksStore';
+import axiosClient from '~/axios';
 
 export const useRequestQuery = ({ queryKey }) => {
   const { id: teamId } = useParams();
@@ -19,7 +20,7 @@ export const useRequestQuery = ({ queryKey }) => {
     }
 
     const apiUrl = qs.stringifyUrl({
-      url: `/api/teams/targets/tasks/approve-requests`,
+      url: `/teams/targets/tasks/approve-requests`,
       query: {
         ...searchQueries,
         team_id: teamId,
@@ -30,23 +31,23 @@ export const useRequestQuery = ({ queryKey }) => {
 
     try {
       // Call API
-      const response = await fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('TOKEN')}`,
-        },
-      });
+      // const response = await fetch(apiUrl, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${localStorage.getItem('TOKEN')}`,
+      //   },
+      // });
 
-      if (!response.ok) {
-        toast.error('Failed to fetch tasks', {
-          position: 'bottom-right',
-        });
-        throw new Error('Failed to fetch tasks');
-      }
+      // if (!response.ok) {
+      //   toast.error('Failed to fetch tasks', {
+      //     position: 'bottom-right',
+      //   });
+      //   throw new Error('Failed to fetch tasks');
+      // }
 
-      const responseData = await response.json();
-      return responseData;
+      const responseData = await axiosClient.get(apiUrl);
+      return responseData.data;
     } catch (error) {
       console.error(error);
     }
