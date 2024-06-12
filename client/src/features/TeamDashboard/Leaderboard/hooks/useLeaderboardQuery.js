@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
+import axiosClient from '~/axios';
 
 export const useLeaderboardQuery = ({ queryKey }) => {
   const { id: teamId } = useParams();
@@ -13,28 +14,28 @@ export const useLeaderboardQuery = ({ queryKey }) => {
     }
 
     const apiUrl = qs.stringifyUrl({
-      url: `/api/teams/${teamId}/leaderboard`,
+      url: `/teams/${teamId}/leaderboard`,
     });
 
     try {
       // Call API
-      const response = await fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('TOKEN')}`,
-        },
-      });
+      // const response = await fetch(apiUrl, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     Authorization: `Bearer ${localStorage.getItem('TOKEN')}`,
+      //   },
+      // });
 
-      if (!response.ok) {
-        toast.error('Failed to fetch leaderboard', {
-          position: 'bottom-right',
-        });
-        throw new Error('Failed to fetch leaderboard');
-      }
+      // if (!response.ok) {
+      //   toast.error('Failed to fetch leaderboard', {
+      //     position: 'bottom-right',
+      //   });
+      //   throw new Error('Failed to fetch leaderboard');
+      // }
 
-      const responseData = await response.json();
-      return responseData;
+      const responseData = await axiosClient.get(apiUrl);
+      return responseData.data;
     } catch (error) {
       console.error(error);
     }
