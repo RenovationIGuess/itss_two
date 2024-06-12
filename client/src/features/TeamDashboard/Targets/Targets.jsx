@@ -42,19 +42,18 @@ const Targets = () => {
   }, 500);
 
   return (
-    <div className="border-r border-secondary col-span-3 flex flex-col">
+    <div className="border-r border-secondary col-span-3 flex flex-col overflow-hidden">
       <div className="pt-4 px-6 pb-0 space-y-1.5 relative">
         <h1 className="text-2xl font-bold">Targets</h1>
         <p className="text-gray-500">All team's targets</p>
-        {
-          authUserRole === 'admin' &&
+        {authUserRole === 'admin' && (
           <Button
             onClick={() => onOpen('createTarget')}
             className="absolute top-[10px] right-6"
           >
             Create +
           </Button>
-        }
+        )}
       </div>
       <div className="flex items-center gap-2 px-6 mt-4">
         <Input

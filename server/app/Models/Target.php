@@ -48,6 +48,10 @@ class Target extends Model
 
         $targetTasks = $this->tasks()->get();
 
+        if ($targetTasks->count() === 0) {
+            return false;
+        }
+
         $allTasksCompleted = true;
 
         foreach ($targetTasks as $task) {

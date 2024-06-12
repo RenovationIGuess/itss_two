@@ -64,6 +64,7 @@ Route::prefix('teams')->group(function () {
     Route::controller(TeamController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/{teamId}/leaderboard', 'getLeaderBoard');
+        Route::get('/{teamId}/profile', 'getAuthUserProfile');
         Route::get('/{teamId}/role', 'getAuthUserRole');
         Route::get('{teamId}', 'show');
         Route::post('/', 'store');

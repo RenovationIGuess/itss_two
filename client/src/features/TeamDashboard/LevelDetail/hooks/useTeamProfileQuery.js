@@ -1,19 +1,19 @@
 import qs from 'query-string';
 import { useParams } from 'react-router-dom';
-import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback } from 'react';
+import axiosClient from '~/axios';
 
-export const useLeaderboardQuery = ({ queryKey }) => {
+export const useTeamProfileQuery = ({ queryKey }) => {
   const { id: teamId } = useParams();
 
-  const fetchLeaderboard = useCallback(async () => {
+  const fetchTeamProfile = useCallback(async () => {
     if (!teamId) {
       return;
     }
 
     const apiUrl = qs.stringifyUrl({
-      url: `/api/teams/${teamId}/leaderboard`,
+      url: `/teams/${teamId}/profile`,
     });
 
     try {
@@ -26,7 +26,7 @@ export const useLeaderboardQuery = ({ queryKey }) => {
 
   const { data, status } = useQuery({
     queryKey,
-    queryFn: fetchLeaderboard,
+    queryFn: fetchTeamProfile,
     refetchInterval: false,
     retry: false,
   });
