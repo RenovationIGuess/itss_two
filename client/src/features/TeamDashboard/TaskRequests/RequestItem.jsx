@@ -110,6 +110,56 @@ const RequestItem = ({
                       {status}
                     </Badge>
                   )}
+                  {/* {status === 'approved' && (
+                    <>
+                      <Badge
+                        className={'cursor-pointer'}
+                        variant={statusVariant}
+                      >
+                        {status}
+                      </Badge>
+                      <Badge
+                        className={'cursor-pointer'}
+                        variant={'destructive'}
+                        onClick={() =>
+                          updateRequest(
+                            requestId,
+                            {
+                              status: 'rejected',
+                            },
+                            'approve'
+                          )
+                        }
+                      >
+                        {'reject'}
+                      </Badge>
+                    </>
+                  )}
+                  {status === 'rejected' && (
+                    <>
+                      <Badge
+                        className={'cursor-pointer'}
+                        variant={statusVariant}
+                      >
+                        {status}
+                      </Badge>
+                      <Badge
+                        onClick={() =>
+                          updateRequest(
+                            requestId,
+                            {
+                              status: 'approved',
+                            },
+                            'approve'
+                          )
+                        }
+                        className={'cursor-pointer'}
+                        variant={'default'}
+                      >
+                        {'approve'}
+                      </Badge>
+                    </>
+                  )} */}
                 </div>
               )}
               {authUserRole !== 'admin' && (

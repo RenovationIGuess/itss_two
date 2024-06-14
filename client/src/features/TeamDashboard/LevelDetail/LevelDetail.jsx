@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs';
-import useTeamStore from '../hooks/useTeamStore';
 import { useTeamProfileQuery } from './hooks/useTeamProfileQuery';
 import { useParams } from 'react-router-dom';
 import { ScrollArea } from '~/components/ui/scroll-area';
@@ -13,7 +12,6 @@ const LevelDetail = () => {
   const { id: teamId } = useParams();
 
   // ['requests', 'levels']
-  const { authUserRole } = useTeamStore();
   const [view, setView] = useState('levels');
 
   const queryKey = useMemo(() => {
@@ -24,24 +22,23 @@ const LevelDetail = () => {
     queryKey,
   });
 
-  if (view === 'requests' && authUserRole === 'admin') {
+  if (view === 'requests') {
     return <TaskRequests />;
   }
 
   return (
     <div className="col-span-3 flex flex-col overflow-hidden">
-      {authUserRole === 'admin' && (
-        <Tabs
-          className="px-6 pt-4"
-          value={view}
-          onValueChange={(value) => setView(value)}
-        >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="requests">Requests</TabsTrigger>
-            <TabsTrigger value="levels">Levels</TabsTrigger>
-          </TabsList>
-        </Tabs>
-      )}
+      <Tabs
+        className="px-6 pt-4"
+        value={view}
+        onValueChange={(value) => setView(value)}
+      >
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="requests">Requests</TabsTrigger>
+          <TabsTrigger value="levels">Levels</TabsTrigger>
+        </TabsList>
+      </Tabs>
+
       <div className="pt-4 px-6 pb-0 space-y-1.5 relative">
         <h1 className="text-2xl font-bold">Levels</h1>
         <p className="text-gray-500">Every levels in the system ~</p>

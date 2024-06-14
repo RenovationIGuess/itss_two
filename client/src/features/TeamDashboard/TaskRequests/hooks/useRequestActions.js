@@ -13,9 +13,28 @@ export const useRequestActions = ({ queryKey }) => {
   const { selectedTargetId } = useTargetsStore();
   const { selectedTaskId } = useTasksStore();
 
+  const { searchQueries: targetSearchQueries } = useTargetsStore();
+  const { searchQueries: taskSearchQueries } = useTasksStore();
+
   const [creating, setCreating] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  const teamDetailQueryKey = useMemo(() => {
+    return ['team-detail', teamId];
+  }, [teamId]);
+
+  const teamLeaderboardQueryKey = useMemo(() => {
+    return ['team-leaderboard', teamId];
+  }, [teamId]);
+
+  const teamTargetsQueryKey = useMemo(() => {
+    return ['team-targets', teamId, targetSearchQueries];
+  }, [teamId, targetSearchQueries]);
+
+  const teamTasksQueryKey = useMemo(() => {
+    return ['target-tasks', teamId, selectedTargetId, taskSearchQueries];
+  }, [teamId, taskSearchQueries, selectedTargetId]);
 
   const baseUrl = useCallback(
     (append) => {
@@ -43,6 +62,8 @@ export const useRequestActions = ({ queryKey }) => {
             return [createdRequest, ...oldData];
           });
 
+          queryClient.invalidateQueries({ queryKey: teamDetailQueryKey });
+
           toast.success('Request created successfully');
           resolvedCallback(data);
         })
@@ -53,7 +74,7 @@ export const useRequestActions = ({ queryKey }) => {
           setCreating(false);
         });
     },
-    [baseUrl]
+    [baseUrl, teamDetailQueryKey]
   );
 
   const updateRequest = useCallback(
@@ -71,6 +92,15 @@ export const useRequestActions = ({ queryKey }) => {
             );
           });
 
+          // Only update if the request if approved by the admin
+          if (type === 'approve' && updatedRequest.status === 'approved') {
+            queryClient.invalidateQueries({
+              queryKey: teamLeaderboardQueryKey,
+            });
+            queryClient.invalidateQueries({ queryKey: teamTargetsQueryKey });
+            queryClient.invalidateQueries({ queryKey: teamTasksQueryKey });
+          }
+
           toast.success('Request updated successfully');
           resolvedCallback(data);
         })
@@ -81,7 +111,7 @@ export const useRequestActions = ({ queryKey }) => {
           setUpdating(false);
         });
     },
-    [baseUrl]
+    [baseUrl, teamLeaderboardQueryKey, teamTargetsQueryKey, teamTasksQueryKey]
   );
 
   const deleteRequest = useCallback(
@@ -94,7 +124,11 @@ export const useRequestActions = ({ queryKey }) => {
           queryClient.setQueryData(queryKey, (oldData) => {
             return oldData.filter((e) => e.id !== requestId);
           });
+
+          queryClient.invalidateQueries({ queryKey: teamDetailQueryKey });
+
           toast.success('Request deleted successfully');
+
           resolvedCallback();
         })
         .catch(() => {
@@ -104,7 +138,7 @@ export const useRequestActions = ({ queryKey }) => {
           setDeleting(false);
         });
     },
-    [baseUrl]
+    [baseUrl, teamDetailQueryKey]
   );
 
   return useMemo(

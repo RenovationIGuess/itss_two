@@ -158,9 +158,14 @@ const CreateTargetModal = ({ queryKey }) => {
                       max={100}
                       id="exp"
                       {...field}
-                      onChange={(e) =>
-                        form.setValue('exp', parseInt(e.target.value))
-                      }
+                      onChange={(e) => {
+                        let updateValue = parseInt(e.target.value);
+
+                        if (updateValue > 100) updateValue = 100;
+                        else if (updateValue < 0) updateValue = 10;
+
+                        form.setValue('exp', updateValue);
+                      }}
                       placeholder="Enter a number..."
                       autoComplete="off"
                     />

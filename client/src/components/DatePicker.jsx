@@ -38,6 +38,7 @@ const DatePicker = ({ initDate, callback = () => {}, className, disabled }) => {
           mode="single"
           selected={date}
           onSelect={setDate}
+          // minDate={startOfDay(new Date())}
           // initialFocus
         />
       </PopoverContent>

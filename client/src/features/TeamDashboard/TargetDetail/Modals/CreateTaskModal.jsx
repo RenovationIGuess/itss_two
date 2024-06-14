@@ -24,8 +24,10 @@ import DatePicker from '~/components/DatePicker';
 import useTasksStore from '../hooks/useTasksStore';
 import { Button } from '~/components/ui/button';
 import { Input } from '~/components/ui/input';
+import useTeamStore from '../../hooks/useTeamStore';
 
 const CreateTaskModal = ({ queryKey }) => {
+  const { authUserRole } = useTeamStore();
   const { isOpen, type, onClose } = useTasksStore();
 
   const isModalOpen = useMemo(() => {
@@ -141,34 +143,41 @@ const CreateTaskModal = ({ queryKey }) => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="exp"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
-                    Exp
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={creating}
-                      className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
-                      type="number"
-                      min={1}
-                      max={100}
-                      id="exp"
-                      {...field}
-                      onChange={(e) =>
-                        form.setValue('exp', parseInt(e.task.value))
-                      }
-                      placeholder="Enter a number..."
-                      autoComplete="off"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {authUserRole === 'admin' && (
+              <FormField
+                control={form.control}
+                name="exp"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+                      Exp
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={creating}
+                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+                        type="number"
+                        min={1}
+                        max={100}
+                        id="exp"
+                        {...field}
+                        onChange={(e) => {
+                          let updateValue = parseInt(e.target.value);
+
+                          if (updateValue > 100) updateValue = 100;
+                          else if (updateValue < 0) updateValue = 10;
+
+                          form.setValue('exp', updateValue);
+                        }}
+                        placeholder="Enter a number..."
+                        autoComplete="off"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <DialogFooter className={''}>
               <Button type="submit" disabled={creating} variant="default">
                 {creating ? (

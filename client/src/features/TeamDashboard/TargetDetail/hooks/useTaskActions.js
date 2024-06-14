@@ -15,6 +15,10 @@ export const useTaskActions = ({ queryKey }) => {
   const [updating, setUpdating] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
+  const teamDetailQueryKey = useMemo(() => {
+    return ['team-detail', teamId];
+  }, [teamId]);
+
   const baseUrl = useCallback(
     (append) => {
       return queryString.stringifyUrl({
@@ -37,6 +41,8 @@ export const useTaskActions = ({ queryKey }) => {
             return [createdTask, ...oldData];
           });
 
+          queryClient.invalidateQueries({ queryKey: teamDetailQueryKey });
+
           toast.success('Task created successfully');
           resolvedCallback(data);
         })
@@ -47,7 +53,7 @@ export const useTaskActions = ({ queryKey }) => {
           setCreating(false);
         });
     },
-    [baseUrl]
+    [baseUrl, teamDetailQueryKey]
   );
 
   const updateTask = useCallback(
@@ -90,7 +96,11 @@ export const useTaskActions = ({ queryKey }) => {
           queryClient.setQueryData(queryKey, (oldData) => {
             return oldData.filter((e) => e.id !== taskId);
           });
+
+          queryClient.invalidateQueries({ queryKey: teamDetailQueryKey });
+
           toast.success('Task deleted successfully');
+
           resolvedCallback();
         })
         .catch(() => {
@@ -100,7 +110,7 @@ export const useTaskActions = ({ queryKey }) => {
           setDeleting(false);
         });
     },
-    [baseUrl]
+    [baseUrl, teamDetailQueryKey]
   );
 
   return useMemo(

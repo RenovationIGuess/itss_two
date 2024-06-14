@@ -14,11 +14,9 @@ import CreateRequestModal from './Modals/CreateRequestModal';
 import UpdateRequestModal from './Modals/UpdateRequestModal';
 import FilterOptions from './components/FilterOptions';
 import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs';
-import useTeamStore from '../hooks/useTeamStore';
 import LevelDetail from '../LevelDetail/LevelDetail';
 
 const TaskRequests = () => {
-  const { authUserRole } = useTeamStore();
   const { id: teamId } = useParams();
   const { selectedTargetId } = useTargetsStore();
   const { selectedTaskId } = useTasksStore();
@@ -57,7 +55,7 @@ const TaskRequests = () => {
     }
   }, 500);
 
-  if (view === 'levels' || authUserRole !== 'admin') {
+  if (view === 'levels') {
     return <LevelDetail />;
   }
 
@@ -67,18 +65,16 @@ const TaskRequests = () => {
 
   return (
     <div className="col-span-3 flex flex-col overflow-hidden">
-      {authUserRole === 'admin' && (
-        <Tabs
-          className="px-6 pt-4"
-          value={view}
-          onValueChange={(value) => setView(value)}
-        >
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="requests">Requests</TabsTrigger>
-            <TabsTrigger value="levels">Levels</TabsTrigger>
-          </TabsList>
-        </Tabs>
-      )}
+      <Tabs
+        className="px-6 pt-4"
+        value={view}
+        onValueChange={(value) => setView(value)}
+      >
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="requests">Requests</TabsTrigger>
+          <TabsTrigger value="levels">Levels</TabsTrigger>
+        </TabsList>
+      </Tabs>
       <div className="pt-4 px-6 pb-0 space-y-1.5 relative">
         <h1 className="text-2xl font-bold">Requests</h1>
         <p className="text-gray-500">All task's approve requests</p>

@@ -50,11 +50,7 @@ const TargetTaskItem = ({
         disabled={authUserRole !== 'admin' && currentUser.id !== creatorId}
       >
         <Card
-          onClick={() =>
-            createdByAdmin &&
-            authUserRole === 'admin' &&
-            setSelectedTaskId(taskId)
-          }
+          onClick={() => createdByAdmin && setSelectedTaskId(taskId)}
           className={cn(
             'cursor-pointer hover:shadow-md relative',
             selectedTaskId === taskId && 'border-black'

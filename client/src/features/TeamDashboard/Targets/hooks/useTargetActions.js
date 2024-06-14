@@ -13,6 +13,10 @@ export const useTargetActions = ({ queryKey }) => {
   const [updating, setUpdating] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
+  const teamDetailQueryKey = useMemo(() => {
+    return ['team-detail', teamId];
+  }, [teamId]);
+
   const baseUrl = useCallback(
     (append) => {
       return queryString.stringifyUrl({
@@ -35,6 +39,8 @@ export const useTargetActions = ({ queryKey }) => {
             return [createdTarget, ...oldData];
           });
 
+          queryClient.invalidateQueries({ queryKey: teamDetailQueryKey });
+
           toast.success('Target created successfully');
           resolvedCallback(data);
         })
@@ -45,7 +51,7 @@ export const useTargetActions = ({ queryKey }) => {
           setCreating(false);
         });
     },
-    [baseUrl]
+    [baseUrl, teamDetailQueryKey]
   );
 
   const updateTarget = useCallback(
@@ -88,7 +94,11 @@ export const useTargetActions = ({ queryKey }) => {
           queryClient.setQueryData(queryKey, (oldData) => {
             return oldData.filter((e) => e.id !== targetId);
           });
+
+          queryClient.invalidateQueries({ queryKey: teamDetailQueryKey });
+
           toast.success('Target deleted successfully');
+
           resolvedCallback();
         })
         .catch(() => {
@@ -98,7 +108,7 @@ export const useTargetActions = ({ queryKey }) => {
           setDeleting(false);
         });
     },
-    [baseUrl]
+    [baseUrl, teamDetailQueryKey]
   );
 
   return useMemo(
