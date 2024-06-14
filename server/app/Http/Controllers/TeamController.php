@@ -31,7 +31,7 @@ class TeamController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|unique:teams,name',
         ]);
 
         $data['join_code'] = Str::random(6) . 'te';

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('targets', function (Blueprint $table) {
             $table->uuid('id')->primary();
 
-            $table->string('title');
+            $table->string('title')->unique();
             $table->string('due')->nullable();
             $table->string('description')->nullable();
             $table->integer('exp')->default(10);

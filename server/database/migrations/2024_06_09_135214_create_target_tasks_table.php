@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('target_id');
             $table->uuid('user_id');
 
-            $table->string('title');
+            $table->string('title')->unique();
             $table->string('description')->nullable();
             $table->string('due')->nullable();
             $table->integer('exp')->default(5);

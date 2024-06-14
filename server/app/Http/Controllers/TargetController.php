@@ -59,7 +59,7 @@ class TargetController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required|string',
+            'title' => 'required|string|unique:targets,title',
             'due' => 'nullable|date',
             'description' => 'nullable|string',
             'exp' => 'sometimes|integer',

@@ -70,7 +70,7 @@ class TargetTaskController extends Controller
         $target = $request->target;
 
         $data = $request->validate([
-            'title' => 'required|string',
+            'title' => 'required|string|unique:target_tasks,title',
             'due' => 'nullable|date',
             'description' => 'nullable|string',
             'exp' => 'sometimes|integer',
