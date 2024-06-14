@@ -8,7 +8,7 @@ import { Progress } from '~/components/ui/progress';
 import { LEVELS } from '../Leaderboard/data/levels';
 import TaskRequests from '../TaskRequests/TaskRequests';
 
-const LevelDetail = () => {
+const LevelDetail = ({ disableViewRequests = false }) => {
   const { id: teamId } = useParams();
 
   // ['requests', 'levels']
@@ -34,7 +34,9 @@ const LevelDetail = () => {
         onValueChange={(value) => setView(value)}
       >
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="requests">Requests</TabsTrigger>
+          <TabsTrigger disabled={disableViewRequests} value="requests">
+            Requests
+          </TabsTrigger>
           <TabsTrigger value="levels">Levels</TabsTrigger>
         </TabsList>
       </Tabs>

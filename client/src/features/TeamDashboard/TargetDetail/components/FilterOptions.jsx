@@ -102,35 +102,38 @@ const FilterOptions = ({
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
-                {members?.map(({ id, name, avatar }) => {
-                  const isSelected =
-                    searchQueries.created_by && searchQueries.created_by === id;
+                <div className="space-y-1">
+                  {members?.map(({ id, name, avatar }) => {
+                    const isSelected =
+                      searchQueries.created_by &&
+                      searchQueries.created_by === id;
 
-                  return (
-                    <CommandItem
-                      key={id}
-                      onSelect={() => {
-                        handleSelectFilterByCreator(id, isSelected);
-                      }}
-                    >
-                      <div
-                        className={cn(
-                          'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-                          isSelected
-                            ? 'bg-primary text-primary-foreground'
-                            : 'opacity-50 [&_svg]:invisible'
-                        )}
+                    return (
+                      <CommandItem
+                        key={id}
+                        onSelect={() => {
+                          handleSelectFilterByCreator(id, isSelected);
+                        }}
                       >
-                        <CheckIcon className={cn('h-4 w-4')} />
-                      </div>
-                      <img
-                        className="object-cover rounded-full w-6 h-6 mr-2"
-                        src={avatar || M7_AVATAR}
-                      />
-                      <span>{name}</span>
-                    </CommandItem>
-                  );
-                })}
+                        <div
+                          className={cn(
+                            'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+                            isSelected
+                              ? 'bg-primary text-primary-foreground'
+                              : 'opacity-50 [&_svg]:invisible'
+                          )}
+                        >
+                          <CheckIcon className={cn('h-4 w-4')} />
+                        </div>
+                        <img
+                          className="object-cover rounded-full w-6 h-6 mr-2"
+                          src={avatar || M7_AVATAR}
+                        />
+                        <span>{name}</span>
+                      </CommandItem>
+                    );
+                  })}
+                </div>
               </CommandGroup>
             </CommandList>
           </Command>

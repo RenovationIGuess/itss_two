@@ -60,7 +60,8 @@ const TaskRequests = () => {
   }
 
   if (!selectedTaskId || !selectedTargetId) {
-    return <TaskRequests.NoTaskSelected />;
+    // return <TaskRequests.NoTaskSelected />;
+    return <LevelDetail disableViewRequests={true} />;
   }
 
   return (

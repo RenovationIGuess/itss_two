@@ -100,7 +100,7 @@ const TargetTaskItem = ({
             <p className="text-sm">
               {due ? format(new Date(due), 'MM/dd/yyyy') : 'Not specified'}
             </p>
-            <Badge>+ {exp} EXP</Badge>
+            {createdByAdmin && <Badge>+ {exp} EXP</Badge>}
           </CardFooter>
         </Card>
       </ContextMenuTrigger>
